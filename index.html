@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A. DRIFT - Anne & Sebastián</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: #0a0e27;
+            color: #00ff88;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Fondo animado de espacio */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20% 30%, #00ff88, rgba(0,255,136,0)),
+                radial-gradient(2px 2px at 60% 70%, #00ccff, rgba(0,204,255,0)),
+                radial-gradient(1px 1px at 50% 50%, #ff00ff, rgba(255,0,255,0)),
+                radial-gradient(1px 1px at 80% 10%, #ffff00, rgba(255,255,0,0));
+            background-size: 200% 200%;
+            background-position: 0% 0%;
+            pointer-events: none;
+            z-index: -1;
+            animation: starfield 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 136, 0.03),
+                    rgba(0, 255, 136, 0.03) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: -1;
+            animation: scanlines 0.15s linear infinite;
+        }
+
+        @keyframes starfield {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-shadow: 0 0 20px #00ff88, 0 0 40px #00ccff;
+            margin-bottom: 0.5rem;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #00ccff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            color: #ff00ff;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-select {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .user-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #00ff88;
+            background: transparent;
+            color: #00ff88;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-btn:hover {
+            background: #00ff88;
+            color: #0a0e27;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .user-btn.active {
+            background: #00ff88;
+            color: #0a0e27;
+            box-shadow: 0 0 30px #00ff88;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+        .section:nth-child(6) { animation-delay: 0.6s; }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            color: #00ccff;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .panel {
+            border: 2px solid #00ff88;
+            background: rgba(10, 14, 39, 0.8);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.1), 0 0 20px rgba(0, 204, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 255, 136, 0.05), rgba(0, 204, 255, 0.05));
+            pointer-events: none;
+        }
+
+        .panel-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .emotions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .emotion-btn {
+            padding: 1rem;
+            border: 2px solid #00ccff;
+            background: rgba(0, 204, 255, 0.1);
+            color: #00ccff;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emotion-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 255, 136, 0.2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .emotion-btn:hover::before {
+            left: 0;
+        }
+
+        .emotion-btn:hover {
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: 0 0 15px #00ff88;
+        }
+
+        .emotion-btn.selected {
+            background: #00ff88;
+            color: #0a0e27;
+            border-color: #00ff88;
+            box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .needs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .need-btn {
+            padding: 0.85rem;
+            border: 2px solid #ff00ff;
+            background: rgba(255, 0, 255, 0.1);
+            color: #ff00ff;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .need-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 255, 0.2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .need-btn:hover::before {
+            left: 0;
+        }
+
+        .need-btn:hover {
+            border-color: #ff00ff;
+            color: #ff00ff;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        .need-btn.selected {
+            background: #ff00ff;
+            color: #0a0e27;
+            border-color: #ff00ff;
+            box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .mission-display {
+            text-align: center;
+            background: rgba(0, 255, 136, 0.05);
+            padding: 2rem;
+            border: 2px dashed #00ff88;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .mission-text {
+            font-size: 1.2rem;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .mission-subtitle {
+            font-size: 0.85rem;
+            color: #00ccff;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary {
+            padding: 1rem;
+            border: 2px solid #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #00ff88;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-primary:hover {
+            color: #0a0e27;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .btn-danger {
+            padding: 1.5rem;
+            border: 3px solid #ff0055;
+            background: rgba(255, 0, 85, 0.1);
+            color: #ff0055;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .btn-danger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #ff0055;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-danger:hover::before {
+            left: 0;
+        }
+
+        .btn-danger:hover {
+            color: #fff;
+            box-shadow: 0 0 30px #ff0055;
+            transform: scale(1.05);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .achievement {
+            background: rgba(255, 0, 255, 0.1);
+            border: 2px solid #ff00ff;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: achievementPop 0.6s ease-out;
+        }
+
+        @keyframes achievementPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        .achievement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 255, 0.1));
+            pointer-events: none;
+        }
+
+        .achievement-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .achievement-text {
+            font-size: 0.8rem;
+            color: #ff00ff;
+            line-height: 1.4;
+        }
+
+        .love-notes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .love-note-btn {
+            padding: 1.5rem;
+            border: 2px solid #ffff00;
+            background: rgba(255, 255, 0, 0.05);
+            color: #ffff00;
+            font-family: 'Space Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            transform: rotate(-2deg);
+        }
+
+        .love-note-btn:hover {
+            transform: rotate(0deg);
+            background: rgba(255, 255, 0, 0.15);
+            border-color: #ffff00;
+            box-shadow: 0 0 20px #ffff00;
+        }
+
+        .reward-display {
+            text-align: center;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 2rem;
+            border: 2px solid #ff00ff;
+        }
+
+        .stars {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5rem;
+            animation: starTwinkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .star-count {
+            font-size: 2.5rem;
+            color: #ffff00;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .rewards-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .reward-item {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #00ff88;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0a0e27;
+            border: 3px solid #00ff88;
+            padding: 2rem;
+            max-width: 500px;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #00ff88;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal-step {
+            margin-bottom: 1.5rem;
+        }
+
+        .step-label {
+            color: #00ccff;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            font-weight: bold;
+        }
+
+        .step-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .step-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .modal-buttons button:hover {
+            background: #00ff88;
+            color: #0a0e27;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px currentColor, 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .emotions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .user-select {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="subtitle">⚓ ASTRO CREW ⚓ <span id="firebaseStatus" style="font-size: 0.7rem; margin-left: 1rem;">📴 Local</span></div>
+            <h1 class="title glow-text">S.A. DRIFT</h1>
+            <div class="tagline">~ Navegando juntos el universo ~</div>
+            
+            <div class="user-select">
+                <button class="user-btn active" onclick="selectUser('sebastian')">🚀 SEBASTIÁN</button>
+                <button class="user-btn" onclick="selectUser('anne')">✨ ANNE</button>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1: CHECK-IN DIARIO -->
+        <div class="section">
+            <div class="section-title">📡 CHECK-IN DIARIO</div>
+            
+            <div class="panel">
+                <div class="panel-content">
+                    <h3 style="color: #00ccff; margin-bottom: 1rem; text-transform: uppercase; font-size: 0.9rem;">¿Cómo me siento hoy?</h3>
+                    <div class="emotions-grid" id="emotionGrid"></div>
+                    
+                    <h3 style="color: #ff00ff; margin: 2rem 0 1rem 0; text-transform: uppercase; font-size: 0.9rem;">¿Qué necesito?</h3>
+                    <div class="needs-grid" id="needsGrid"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: MISIÓN DEL DÍA -->
+        <div class="section">
+            <div class="section-title">🎯 MISIÓN GALÁCTICA</div>
+            
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="mission-display">
+                        <div class="mission-emoji" id="missionEmoji">🌌</div>
+                        <div class="mission-text" id="missionText">Cargando misión...</div>
+                        <div class="mission-subtitle">Complétala para desbloquear ⭐</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-primary" onclick="completeMission()">✅ COMPLETADA</button>
+                        <button class="btn-primary" onclick="skipMission()">⏭️ PARA MAÑANA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: BOTÓN ANTI-PLEITO -->
+        <div class="section">
+            <div class="section-title">🛑 PAUSA INTERGALÁCTICA</div>
+            
+            <div class="panel">
+                <div class="panel-content">
+                    <p style="color: #00ccff; margin-bottom: 1.5rem; text-align: center; font-size: 0.9rem;">Si hay fricción, presiona aquí primero:</p>
+                    <button class="btn-danger" onclick="openAntiConflict()">PAUSA. NO SOMOS ENEMIGOS.</button>
+                    <p style="color: #ff00ff; margin-top: 1rem; text-align: center; font-size: 0.8rem;">Regla: Primero entiendo, luego respondo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: COFRE DE LOGROS -->
+        <div class="section">
+            <div class="section-title">💫 COFRE DE LOGROS</div>
+            
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="achievements-grid" id="achievementsGrid"></div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="openAddAchievement()">+ AÑADIR LOGRO</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5: BANCO DE CARIÑO -->
+        <div class="section">
+            <div class="section-title">💕 BANCO DE CARIÑO</div>
+            
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="love-notes" id="loveNoteOptions"></div>
+                    <div id="loveNotesDisplay" style="margin-top: 2rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 6: RECOMPENSAS -->
+        <div class="section">
+            <div class="section-title">⭐ RECOMPENSAS COMPARTIDAS</div>
+            
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="reward-display">
+                        <div class="stars" id="starDisplay">⭐⭐⭐</div>
+                        <div class="star-count" id="starCount">0 / 10</div>
+                        <p style="color: #00ccff; font-size: 0.9rem; margin-bottom: 1.5rem;">Cada logro = 1 estrella</p>
+                        <div class="rewards-list" id="rewardsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALES -->
+    <div id="antiConflictModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">🛑 PAUSA</div>
+            <div class="modal-step">
+                <div class="step-label">PASO 1: ¿QUÉ SIENTO YO?</div>
+                <input type="text" class="step-input" id="stepFeeling" placeholder="Enojado, triste, confundido...">
+            </div>
+            <div class="modal-step">
+                <div class="step-label">PASO 2: ¿QUÉ CREES QUE SIENTE EL OTRO?</div>
+                <input type="text" class="step-input" id="stepOtherFeeling" placeholder="Lo crees furioso, herido, abrumado...">
+            </div>
+            <div class="modal-step">
+                <div class="step-label">PASO 3: ¿QUÉ PROPONGO?</div>
+                <input type="text" class="step-input" id="stepSolution" placeholder="Hablar después, pedir ayuda, un abrazo...">
+            </div>
+            <div class="modal-buttons">
+                <button onclick="savePauseConversation()">GUARDAR</button>
+                <button onclick="closeAntiConflict()">CERRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addAchievementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">✨ NUEVO LOGRO</div>
+            <div class="modal-step">
+                <div class="step-label">DESCRIBE EL LOGRO</div>
+                <input type="text" class="step-input" id="achievementText" placeholder="Ej: Hoy dije la verdad aunque me costó...">
+            </div>
+            <div class="modal-buttons">
+                <button onclick="saveAchievement()">GUARDAR ⭐</button>
+                <button onclick="closeAddAchievement()">CERRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loveNoteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="loveNoteTitle">💕 MENSAJE</div>
+            <div class="modal-step">
+                <div class="step-label" id="loveNoteLabel">ESCRIBE AQUÍ</div>
+                <input type="text" class="step-input" id="loveNoteText" placeholder="Di lo que sientes...">
+            </div>
+            <div class="modal-buttons">
+                <button onclick="saveLoveNote()">ENVIAR 💌</button>
+                <button onclick="closeLoveNoteModal()">CERRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js"></script>
+
+    <script>
+        // ===== CONFIGURACIÓN FIREBASE =====
+        // IMPORTANTE: Reemplaza esto con tus credenciales de Firebase
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Inicializar Firebase
+        let db = null;
+        let unsubscribes = [];
+
+        try {
+            const app = firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore(app);
+            console.log('✅ Firebase inicializado');
+        } catch (error) {
+            console.warn('⚠️ Firebase no configurado:', error.message);
+            console.log('Funcionando en modo local (localStorage)');
+        }
+
+        // ===== DATOS =====
+        const emotions = ['😌 Tranquilo', '😤 Enojado', '😴 Cansado', '🥺 Sensible', '😊 Contento'];
+        const needs = ['📴 Espacio', '🫂 Abrazo', '🤝 Ayuda', '🎮 Jugar'];
+        const missions = [
+            { emoji: '⏰', text: '10 minutos sin pantallas juntos' },
+            { emoji: '🧹', text: 'Ordenar una esquina' },
+            { emoji: '🍪', text: 'Hacer un snack juntos' },
+            { emoji: '🚶', text: 'Caminar 5 minutos' },
+            { emoji: '🎨', text: 'Dibujar algo raro' },
+            { emoji: '💬', text: 'Decir 1 cosa buena del otro' }
+        ];
+        const rewards = [
+            '🍿 Peli juntos',
+            '🍽️ Cena especial',
+            '🎵 Elegir música',
+            '🚴 Salida pequeña',
+            '🍰 Noche de postre',
+            '🎮 20 min juego libre'
+        ];
+
+        const loveNoteOptions = [
+            { emoji: '🙏', text: 'gracias por…' },
+            { emoji: '💕', text: 'me gustó cuando…' },
+            { emoji: '💬', text: 'perdón por…' },
+            { emoji: '✨', text: 'me gustaría que…' },
+            { emoji: '👑', text: 'te admiro por…' }
+        ];
+
+        let currentUser = 'sebastian';
+        let appData = {
+            sebastian: {
+                emotions: [],
+                needs: [],
+                achievements: [],
+                loveNotes: [],
+                dailyMission: null,
+                stars: 0,
+                lastUpdated: new Date().toISOString()
+            },
+            anne: {
+                emotions: [],
+                needs: [],
+                achievements: [],
+                loveNotes: [],
+                dailyMission: null,
+                stars: 0,
+                lastUpdated: new Date().toISOString()
+            }
+        };
+
+        let currentLoveNoteType = null;
+        let useFirebase = db !== null;
+
+        // ===== FUNCIONES DE DATOS =====
+        async function loadData() {
+            if (useFirebase) {
+                await loadFromFirebase();
+                setupRealtimeSync();
+            } else {
+                loadFromLocalStorage();
+            }
+            initializeMission();
+            render();
+        }
+
+        async function loadFromFirebase() {
+            try {
+                const sebastianDoc = await db.collection('users').doc('sebastian').get();
+                const anneDoc = await db.collection('users').doc('anne').get();
+                
+                if (sebastianDoc.exists) {
+                    appData.sebastian = sebastianDoc.data();
+                }
+                if (anneDoc.exists) {
+                    appData.anne = anneDoc.data();
+                }
+                console.log('✅ Datos cargados desde Firebase');
+            } catch (error) {
+                console.error('Error cargando Firebase:', error);
+                useFirebase = false;
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('saDriftData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+            console.log('✅ Datos cargados desde localStorage');
+        }
+
+        function setupRealtimeSync() {
+            if (!useFirebase) return;
+
+            // Actualizar status
+            document.getElementById('firebaseStatus').textContent = '🟢 Firestore';
+            document.getElementById('firebaseStatus').style.color = '#00ff88';
+
+            // Desuscribir actualizaciones anteriores
+            unsubscribes.forEach(unsub => unsub());
+            unsubscribes = [];
+
+            // Escuchar cambios en tiempo real para Sebastián
+            const unsubSebastian = db.collection('users').doc('sebastian')
+                .onSnapshot(doc => {
+                    if (doc.exists) {
+                        appData.sebastian = doc.data();
+                        if (currentUser === 'sebastian') render();
+                    }
+                });
+
+            // Escuchar cambios en tiempo real para Anne
+            const unsubAnne = db.collection('users').doc('anne')
+                .onSnapshot(doc => {
+                    if (doc.exists) {
+                        appData.anne = doc.data();
+                        if (currentUser === 'anne') render();
+                    }
+                });
+
+            unsubscribes.push(unsubSebastian, unsubAnne);
+            console.log('✅ Sincronización real activa');
+        }
+
+        async function saveData() {
+            appData[currentUser].lastUpdated = new Date().toISOString();
+
+            if (useFirebase) {
+                try {
+                    await db.collection('users').doc(currentUser).set(appData[currentUser], { merge: true });
+                } catch (error) {
+                    console.error('Error guardando en Firebase:', error);
+                    saveToLocalStorage();
+                }
+            } else {
+                saveToLocalStorage();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('saDriftData', JSON.stringify(appData));
+        }
+
+        // Seleccionar usuario
+        function selectUser(user) {
+            currentUser = user;
+            document.querySelectorAll('.user-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            render();
+        }
+
+        // Renderizar interfaz
+        function render() {
+            renderEmotions();
+            renderNeeds();
+            renderMission();
+            renderAchievements();
+            renderLoveNotes();
+            renderRewards();
+        }
+
+        function renderEmotions() {
+            const grid = document.getElementById('emotionGrid');
+            grid.innerHTML = emotions.map(emotion => {
+                const isSelected = appData[currentUser].emotions.includes(emotion);
+                return `<button class="emotion-btn ${isSelected ? 'selected' : ''}" onclick="toggleEmotion('${emotion}')">${emotion}</button>`;
+            }).join('');
+        }
+
+        function renderNeeds() {
+            const grid = document.getElementById('needsGrid');
+            grid.innerHTML = needs.map(need => {
+                const isSelected = appData[currentUser].needs.includes(need);
+                return `<button class="need-btn ${isSelected ? 'selected' : ''}" onclick="toggleNeed('${need}')">${need}</button>`;
+            }).join('');
+        }
+
+        function renderMission() {
+            const mission = appData[currentUser].dailyMission;
+            if (mission) {
+                document.getElementById('missionEmoji').textContent = mission.emoji;
+                document.getElementById('missionText').textContent = mission.text;
+            }
+        }
+
+        function renderAchievements() {
+            const grid = document.getElementById('achievementsGrid');
+            const achievements = appData[currentUser].achievements;
+            if (achievements.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; color: #00ccff; text-align: center;">Aún no hay logros. ¡Crea uno!</p>';
+            } else {
+                grid.innerHTML = achievements.map((ach, idx) => 
+                    `<div class="achievement"><div class="achievement-emoji">⭐</div><div class="achievement-text">${ach}</div><button class="btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.5rem; font-size: 0.7rem;" onclick="removeAchievement(${idx})">Eliminar</button></div>`
+                ).join('');
+            }
+        }
+
+        function renderLoveNotes() {
+            const container = document.getElementById('loveNoteOptions');
+            container.innerHTML = loveNoteOptions.map(opt => 
+                `<button class="love-note-btn" onclick="openLoveNoteModal('${opt.text}')">${opt.emoji}<br>${opt.text}</button>`
+            ).join('');
+
+            const display = document.getElementById('loveNotesDisplay');
+            const notes = appData[currentUser].loveNotes;
+            if (notes.length > 0) {
+                display.innerHTML = '<h3 style="color: #ffff00; margin-bottom: 1rem; text-transform: uppercase; font-size: 0.85rem;">Mensajes recibidos:</h3>' + 
+                    notes.map((note, idx) => 
+                        `<div style="background: rgba(255, 255, 0, 0.1); border: 1px solid #ffff00; padding: 1rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: #ffff00;"><strong>${note.type}:</strong> ${note.message}<button class="btn-primary" style="width: 100%; margin-top: 0.75rem; padding: 0.5rem; font-size: 0.7rem;" onclick="removeLoveNote(${idx})">Eliminar</button></div>`
+                    ).join('');
+            }
+        }
+
+        function renderRewards() {
+            const count = appData[currentUser].stars;
+            document.getElementById('starCount').textContent = `${count} / 10`;
+            const starDisplay = Math.min(count, 10);
+            document.getElementById('starDisplay').textContent = '⭐'.repeat(Math.max(1, starDisplay)) || '⭐';
+            
+            const list = document.getElementById('rewardsList');
+            list.innerHTML = rewards.map(reward => 
+                `<div class="reward-item">${reward}</div>`
+            ).join('');
+        }
+
+        // Acciones
+        function toggleEmotion(emotion) {
+            const idx = appData[currentUser].emotions.indexOf(emotion);
+            if (idx > -1) {
+                appData[currentUser].emotions.splice(idx, 1);
+            } else {
+                appData[currentUser].emotions = [emotion];
+            }
+            saveData();
+            renderEmotions();
+        }
+
+        function toggleNeed(need) {
+            const idx = appData[currentUser].needs.indexOf(need);
+            if (idx > -1) {
+                appData[currentUser].needs.splice(idx, 1);
+            } else {
+                appData[currentUser].needs = [need];
+            }
+            saveData();
+            renderNeeds();
+        }
+
+        function initializeMission() {
+            const today = new Date().toDateString();
+            const storageKey = 'missionDate_' + currentUser;
+            const savedDate = localStorage.getItem(storageKey);
+            
+            if (savedDate !== today) {
+                const randomMission = missions[Math.floor(Math.random() * missions.length)];
+                appData[currentUser].dailyMission = randomMission;
+                localStorage.setItem(storageKey, today);
+                saveData();
+            }
+        }
+
+        function completeMission() {
+            appData[currentUser].stars = Math.min(10, appData[currentUser].stars + 1);
+            saveData();
+            renderRewards();
+            alert('🎉 ¡Misión completada! +1 estrella');
+        }
+
+        function skipMission() {
+            initializeMission();
+            renderMission();
+            alert('⏭️ Nueva misión cargada para mañana');
+        }
+
+        function openAntiConflict() {
+            document.getElementById('antiConflictModal').classList.add('active');
+        }
+
+        function closeAntiConflict() {
+            document.getElementById('antiConflictModal').classList.remove('active');
+        }
+
+        function savePauseConversation() {
+            const feeling = document.getElementById('stepFeeling').value;
+            const otherFeeling = document.getElementById('stepOtherFeeling').value;
+            const solution = document.getElementById('stepSolution').value;
+            
+            if (feeling && otherFeeling && solution) {
+                alert('✅ Conversación guardada. Ahora hablen tranquilos.');
+                document.getElementById('stepFeeling').value = '';
+                document.getElementById('stepOtherFeeling').value = '';
+                document.getElementById('stepSolution').value = '';
+                closeAntiConflict();
+                appData[currentUser].stars = Math.min(10, appData[currentUser].stars + 1);
+                saveData();
+                renderRewards();
+            } else {
+                alert('⚠️ Completa los 3 pasos');
+            }
+        }
+
+        function openAddAchievement() {
+            document.getElementById('addAchievementModal').classList.add('active');
+        }
+
+        function closeAddAchievement() {
+            document.getElementById('addAchievementModal').classList.remove('active');
+        }
+
+        function saveAchievement() {
+            const text = document.getElementById('achievementText').value;
+            if (text) {
+                appData[currentUser].achievements.push(text);
+                appData[currentUser].stars = Math.min(10, appData[currentUser].stars + 1);
+                saveData();
+                renderAchievements();
+                renderRewards();
+                document.getElementById('achievementText').value = '';
+                closeAddAchievement();
+                alert('⭐ ¡Logro añadido!');
+            }
+        }
+
+        function removeAchievement(idx) {
+            appData[currentUser].achievements.splice(idx, 1);
+            saveData();
+            renderAchievements();
+        }
+
+        function openLoveNoteModal(type) {
+            currentLoveNoteType = type;
+            document.getElementById('loveNoteTitle').textContent = `💕 ${type.toUpperCase()}`;
+            document.getElementById('loveNoteLabel').textContent = `COMPLETA: "${type}"`;
+            document.getElementById('loveNoteModal').classList.add('active');
+        }
+
+        function closeLoveNoteModal() {
+            document.getElementById('loveNoteModal').classList.remove('active');
+        }
+
+        function saveLoveNote() {
+            const message = document.getElementById('loveNoteText').value;
+            if (message && currentLoveNoteType) {
+                const otherUser = currentUser === 'sebastian' ? 'anne' : 'sebastian';
+                appData[otherUser].loveNotes.push({
+                    type: currentLoveNoteType,
+                    message: message
+                });
+                appData[currentUser].stars = Math.min(10, appData[currentUser].stars + 1);
+                saveData();
+                document.getElementById('loveNoteText').value = '';
+                closeLoveNoteModal();
+                alert('💌 ¡Mensaje enviado!');
+                renderRewards();
+            }
+        }
+
+        function removeLoveNote(idx) {
+            appData[currentUser].loveNotes.splice(idx, 1);
+            saveData();
+            renderLoveNotes();
+        }
+
+        // Iniciar
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>
